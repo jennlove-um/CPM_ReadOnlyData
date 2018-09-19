@@ -1,0 +1,10 @@
+# List of sites to which write permissions should be restored.  Values
+# in the first column will be used as the site id.  Rows starting with
+# a # will be ignored.
+
+# This should always contain at least one site id.  It can be an arbitrary string.
+07d54a12-2530-4f2f-a220-b0a31e418f51
+659d544e-f9b4-4745-84e1-3a4453d7e58e
+a9685e1a-d0a8-4e3f-9276-bacbd4b3b682
+#end
+
