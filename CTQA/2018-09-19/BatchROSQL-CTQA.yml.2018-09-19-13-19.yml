@@ -1,0 +1,216 @@
+# Read only config file generated automatically from BatchROSQL-CTQA.yml at 2018-09-19-13-19
+
+# Configuration file for generating SQL to REMOVE/RESTORE permissions
+# from specific sites / roles.  Copy and rename the template file
+# version to specialize it for a specific CTools instance.
+
+# The file format is yaml. Note that yaml is sensitive to
+# indentation. Lines whose first non-whitespace character is a '#' are
+# ignored.
+
+# Sites to be make read-only are chosen by site type.  Specific sites
+# to exempt from the read-only change can be listed below.  Specific
+# sites to be restored need to have their site ids listed below.
+# Important details on this is given later in the file.
+
+#########
+
+# This is the table prefix for the SQL queries.  It will vary by
+# database instance.  Uncomment only one value.
+
+#db_user: CTDEV_USER
+db_user: CTQA_USER
+#db_user: CTOOLS_USER
+
+########## These next 3 values are unlikely to change. #########
+# Put in a line break for comma separated lists in IN clause every this many entries.
+comma_break_rate: 5
+# Maximum number of realms to add to each query (obsolete)
+realms_max: 20
+# Table used for logging actions taken.  Unlikely to change except when testing.
+ACTION_LOG_TABLE: cpm_action_log
+##########
+
+
+#################################################
+
+# Name of role / function archive table to be used for restoring
+# permissions.  This value needs to be set each time a restoriation is
+# done.  There may be multiple backup tables and someone needs to
+# indentify the correct one.  The table name format is
+# 'sakai_realm_rl_fn_' with the date of table creation appended.  SQL
+# to generate a date specific backup table is created automatically
+# along with the read only sql.
+
+ARCHIVE_ROLE_FUNCTION_TABLE: sakai_realm_rl_fn_18091817
+
+############### Read only specification ##############
+# The roles and permissions listed here are very unlikely to change.  The
+# siteType list might be adjusted to only do a subset of the types for
+# a particular run.
+############# Readonly site types
+# These site types will be made read-only.
+siteTypes:
+   - specialized_projects
+   - specialized_project
+   - specialized_course
+   - specialized_courses
+   - project
+   - course
+
+############# Roles to make read-only.
+# These roles will have the permissions removed in all listed sites.
+roles:
+    - Member
+    - Observer
+    - Organizer
+    - Owner
+    - Affiliate 
+    - Assistant 
+    - Instructor 
+    - Librarian 
+    - Student 
+ #   - access 
+ #   - maintain
+
+############# Permissions to remove.
+# These functions/permissions will be REMOVED from requested roles in requested sites.
+functions:
+    - annc.delete.any
+    - annc.delete.own
+    - annc.new
+    - annc.revise.any
+    - annc.revise.own
+    - calendar.delete.any
+    - calendar.delete.own
+    - calendar.import
+    - calendar.new
+    - calendar.revise.any
+    - calendar.revise.own
+    - chat.delete.any
+    - chat.delete.channel
+    - chat.delete.own
+    - chat.new
+    - chat.new.channel
+    - content.delete.any
+    - content.delete.own
+    - content.hidden
+    - content.new
+    - content.revise.any
+    - content.revise.own
+    - content.all.groups
+    - dropbox.maintain
+    - mail.delete.any
+    - mail.new
+    - realm.del
+    - realm.upd
+    - realm.upd.own
+    - site.upd
+    - site.upd.site.mbrshp
+    - site.upd.grp.mbrshp
+    #added below for course sites
+    - asn.delete
+    - asn.grade
+    - asn.new
+    - asn.revise
+    - asn.submit
+    - assessment.createAssessment
+    - assessment.deleteAssessment.any
+    - assessment.deleteAssessment.own
+    - assessment.editAssessment.any
+    - assessment.editAssessment.own
+    - assessment.publishAssessment.any
+    - assessment.publishAssessment.own
+    - assessment.questionpool.create
+    - assessment.questionpool.delete.own
+    - assessment.questionpool.edit.own
+    - assessment.submitAssessmentForGrade
+    - assessment.takeAssessment
+    - assessment.template.create
+    - assessment.template.delete.own
+    - assessment.template.edit.own
+    - disc.delete.any
+    - disc.delete.own
+    - disc.new
+    - disc.new.topic
+    - disc.revise.any
+    - disc.revise.own
+    - lessonbuilder.upd
+    
+
+###################### list of special sites to restore / exempt
+
+# Sometimes sites need to be listed explicitly by site id.  The site lists
+# always contain a dummy siteid so that there is at least one.  (See if you can
+# guess which one it is.)
+
+# While the sites are obtained from the yml file the lists of sites
+# are maintained in csv files. Those files are read at when the
+# generateBatchROSqlSite.pl script is run to create a one-time yml file
+# for the actual sql script creation.  The yml format is illustrated below
+# but the user doesn't need to explicitly add the lists to the yml file. 
+
+# Sites on the restoreSites list will have their permissions restored
+# from the archive table specified elsewhere.  Remove sites on the
+# list after they are processed so that permissions aren't restored by
+# accident in a future run.
+
+# restoreSites:
+#     - ImJustADummySiteIdStringHAHAYouCantFindMe
+
+# Sites on the list of excluded sites will not be made read-only.  If there are
+# multiple runs of the script verify that the right sites continue to
+# be on the list.  Some administrative sites should always be listed.
+# E.g. the gateway admin site.  The list must have at least one entry
+# so a dummy site should be included.
+
+# Sample excluded Sites entry.  The real site ids are read from the
+# exemptsites.csv file
+
+# excludedSites:
+#    - ImJustADummySiteIdStringHAHAYouCantFindMe
+
+#end
+##### excludedSites sites added from exemptsites.csv
+
+excludedSites:
+    - 0143bc53-cd85-4785-bff8-ea91de2b51ee
+    - 0190840f-0226-4f4a-a277-2d57e50168e7
+    - 103560c1-409b-4efc-b7e6-e0a6f2a562fb
+    - 1065049660132-200130
+    - 1092982617998-1527222
+    - 1094761206623-1975519
+    - 1097008430519-2671320
+    - 1097931068569-2883089
+    - 1098215494414-2923710
+    - 1110561025582-18753263
+    - 1114447865716-19816380
+    - 1116357771173-20150707
+    - 198249f5-4085-45fb-80e9-973e20f0b52c
+    - 23877706-c7db-4999-8b03-879291f7347b
+    - 2dcbca62-101a-488a-915d-6f9cf9ed4471
+    - 306c663b-faaa-4b4e-95a5-30eeb198dcf6
+    - 31a5da74-aea3-4b30-a31e-f2bd08e911f3
+    - 34e68708-d56e-4fc2-a8f1-66519a8993c3
+    - 3b25802e-99d6-4c67-a86e-6ad4e0a25e94
+    - 3e324a8f-526d-4761-b433-cadfda2020e3
+    - 49e65c6d-8021-41ee-b10d-925f44f24dc8
+    - 4f26b210-1dad-496c-9ad2-ce9c8ad6c002
+    - 6136d20e-5efe-4c40-987d-a6d538501e28
+    - 6ce84fb8-f1c0-4a1f-9e46-4e2a92026379
+    - 83fa69bc-6f3b-473d-bdd8-119b2652df46
+    - 99e7b97d-cdcb-443a-870a-ef2bea5869fc
+    - d9254f6e-e201-4a83-9bda-9ef015a5dbc4
+    - e3e047ef-fb41-4fe1-b06a-fb9177c4a9d1
+    - ef72a1a9-300d-41fa-9f5f-1f8aa40afcfa
+    - f2867e81-4954-4c27-ab55-fc9dd545bcf8
+    - f85d2cde-22b2-4f87-9698-b61fd51b8eef
+    - fa1b7c3d-5334-47cc-ac07-0aaa057de981
+    - fe189c68-2bff-4703-a56d-ce76dbdca12b
+
+##### restoreSites sites added from restoresites.csv
+
+restoreSites:
+    - 07d54a12-2530-4f2f-a220-b0a31e418f51
+    - 659d544e-f9b4-4745-84e1-3a4453d7e58e
+    - a9685e1a-d0a8-4e3f-9276-bacbd4b3b682
